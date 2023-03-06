@@ -1,8 +1,11 @@
 from fastapi import FastAPI
-from api.api_v1.api import router as api_router
 from mangum import Mangum
 
 app = FastAPI()
 
-app.include_router(api_router)
-handler = Mangum(app=app)
+
+@app.get("/ping")
+async def root():
+    return {"message": "pong-2"}
+
+lambda_handler = Mangum(app=app)
