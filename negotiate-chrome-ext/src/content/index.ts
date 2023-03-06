@@ -12,7 +12,6 @@ waitForElement('textarea')
         cancelButton.parentNode!!.insertBefore(newButton, cancelButton)
     })
 
-// messageSellerButton.onclick = newOnClick
 
 function setMessage(msg: string) {
     const EVENT_OPTIONS = { bubbles: true, cancelable: false, composed: true };

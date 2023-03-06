@@ -1,0 +1,6 @@
+#!/bin/bash
+
+sam deploy --region us-west-2 \
+           --stack-name marketplace-negotiate-python-be-2 \
+           --resolve-s3 --capabilities CAPABILITY_IAM
+
