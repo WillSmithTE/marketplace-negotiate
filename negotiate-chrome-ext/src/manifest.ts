@@ -24,6 +24,7 @@ export default defineManifest({
     {
       matches: ['https://www.facebook.com/marketplace/item/*'],
       js: ['src/content/index.ts'],
+      css: ['content.css'],
     },
   ],
   web_accessible_resources: [

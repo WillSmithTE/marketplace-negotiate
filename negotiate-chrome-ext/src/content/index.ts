@@ -1,40 +1,18 @@
-console.info('chrome-ext template-react-ts content script')
-
-const messageSellerButton: HTMLElement = document.querySelector('[aria-label="Message Seller"]')!!
-const oldOnMessageClick = messageSellerButton.onclick!!
-console.log({ oldOnMessageClick })
-// const newOnClick: (this: GlobalEventHandlers, ev: MouseEvent) => any = ((global: GlobalEventHandlers, ev: MouseEvent) => {
-//     const result = oldOnMessageClick.call(global, ev)
-//     showLoader()
-//     return result
-// }) as any
-//div[text()="Hello World"]
-
 waitForElement('textarea')
     .then(() => {
         var cancelButton = document.querySelector('[aria-label="Cancel"]')?.parentNode!!
         var newButton = cancelButton.cloneNode(true)
         styleNewButton(newButton as HTMLElement, 'SmartText');
         (newButton as HTMLElement).onclick = (ev) => {
-            console.log('clicked')
             showLoader()
             getSuggestedMessage()
                 .then(setMessage)
-                .catch(hideLoader)
+                .finally(hideLoader)
         }
         cancelButton.parentNode!!.insertBefore(newButton, cancelButton)
     })
-    .finally(hideLoader)
 
 // messageSellerButton.onclick = newOnClick
-
-const onClickMessageSeller = () => {
-    showLoader();
-
-    hideLoader()
-
-
-}
 
 function setMessage(msg: string) {
     const EVENT_OPTIONS = { bubbles: true, cancelable: false, composed: true };
@@ -53,10 +31,15 @@ function setMessage(msg: string) {
 }
 
 function showLoader() {
-
+    console.log('showing spinner')
+    const elemDiv = document.createElement('div');
+    elemDiv.className = 'loading'
+    elemDiv.id = 'spinner'
+    document.body.appendChild(elemDiv);
 }
 function hideLoader() {
-
+    console.log('hiding spinner')
+    document.getElementById('spinner')?.remove()
 }
 
 async function getSuggestedMessage() {
