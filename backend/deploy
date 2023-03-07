@@ -1,6 +1,4 @@
 #!/bin/bash
 
-sam deploy --region us-west-2 \
-           --stack-name marketplace-negotiate-python-be-2 \
-           --resolve-s3 --capabilities CAPABILITY_IAM
-
+direnv allow
+sam deploy --parameter-overrides OpenAIApiKey=$OPENAI_API_KEY

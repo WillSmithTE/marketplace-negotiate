@@ -6,6 +6,10 @@ Description: marketplace-neg-3
 Globals:
   Function:
     Timeout: 3
+    Environment:
+      Variables:
+        OPENAI_API_KEY: !Ref OpenAIApiKey
+
 
 Resources:
   MarketplaceNegFunction:
@@ -41,3 +45,9 @@ Outputs:
   MarketplaceNegFunctionIamRole:
     Description: "Implicit IAM Role created for Hello World function"
     Value: !GetAtt MarketplaceNegFunctionRole.Arn
+
+Parameters:
+  OpenAIApiKey:
+    Type: String
+
+  
