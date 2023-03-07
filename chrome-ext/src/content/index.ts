@@ -1,5 +1,10 @@
-waitForElement('textarea')
+const baseUrl = 'https://hh5turw0d7.execute-api.us-west-2.amazonaws.com/Prod'
+// const baseUrl = 'http://localhost:8000'
+
+function waitForTextArea() {
+    waitForElement('textarea')
     .then(() => {
+        waitForNotElement('textarea').finally(waitForTextArea)
         var cancelButton = document.querySelector('[aria-label="Cancel"]')?.parentNode!!
         var newButton = cancelButton.cloneNode(true)
         styleNewButton(newButton as HTMLElement, 'SmartText');
@@ -11,6 +16,8 @@ waitForElement('textarea')
         }
         cancelButton.parentNode!!.insertBefore(newButton, cancelButton)
     })
+}
+waitForTextArea()
 
 
 function setMessage(msg: string) {
@@ -41,19 +48,13 @@ function hideLoader() {
 
 async function getSuggestedMessage() {
     console.log('getting message')
-    const header = document.querySelector('h1')!!
-    const itemName = header.innerText
-    const listedPriceString = (header.parentElement!!.parentElement!!.children[1] as HTMLElement).innerText
-    const listedPrice = toNumber(listedPriceString)
-    const sellerName = ''
-    const response = await (await fetch("https://hh5turw0d7.execute-api.us-west-2.amazonaws.com/Prod/suggestion/new", {
+    const listing = (document.querySelector('[role="dialog"]')!! as HTMLElement).innerText
+    const response = await (await fetch(`${baseUrl}/suggestion/new`, {
         "body": JSON.stringify({
-            sellerName,
-            itemName,
-            listedPrice,
+            listing,
             "maxPrice": undefined,
             "availableTimes": "",
-            "buyerName": "",
+            "buyerName": undefined,
         }),
         "method": "POST",
         "mode": "cors",
@@ -76,6 +77,25 @@ function waitForElement(selector: string) {
         const observer = new MutationObserver(mutations => {
             if (document.querySelector(selector)) {
                 resolve(document.querySelector(selector));
+                observer.disconnect();
+            }
+        });
+
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
+    });
+}
+function waitForNotElement(selector: string) {
+    return new Promise(resolve => {
+        if (!document.querySelector(selector)) {
+            return;
+        }
+
+        const observer = new MutationObserver(mutations => {
+            if (!document.querySelector(selector)) {
+                resolve(undefined);
                 observer.disconnect();
             }
         });
