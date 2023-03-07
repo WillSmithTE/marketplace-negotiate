@@ -2,9 +2,22 @@ from fastapi import FastAPI
 from mangum import Mangum
 import openai
 from pydantic import BaseModel
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
+origins = [
+    "http://localhost:8000",
+    "https://www.facebook.com"
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/ping")
 async def ping():
@@ -24,12 +37,12 @@ async def testGpt():
     return { "message": result}
 
 class ThreadCreationRequest(BaseModel):
-    buyerName: str
+    buyerName: str or None = None
     sellerName: str
     itemName: str
     listedPrice: float
-    maxPrice: float
-    availableTimes: str
+    maxPrice: float or None = None
+    availableTimes: str or None = None
 
 @app.post("/suggestion/new")
 async def getSuggestionForNewThread(request: ThreadCreationRequest):

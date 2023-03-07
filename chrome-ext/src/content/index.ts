@@ -43,20 +43,24 @@ async function getSuggestedMessage() {
     console.log('getting message')
     const header = document.querySelector('h1')!!
     const itemName = header.innerText
-    const listedPrice = (header.parentElement!!.parentElement!!.children[1] as HTMLElement).innerText
-    const sellerName = 
-    const response = await (await fetch("https://hh5turw0d7.execute-api.us-west-2.amazonaws.com/Prod//suggestion/new", {
+    const listedPriceString = (header.parentElement!!.parentElement!!.children[1] as HTMLElement).innerText
+    const listedPrice = toNumber(listedPriceString)
+    const sellerName = ''
+    const response = await (await fetch("https://hh5turw0d7.execute-api.us-west-2.amazonaws.com/Prod/suggestion/new", {
         "body": JSON.stringify({
-            "sellerName": ,
+            sellerName,
             itemName,
             listedPrice,
-            "maxPrice": "",
+            "maxPrice": undefined,
             "availableTimes": "",
             "buyerName": "",
-
         }),
         "method": "POST",
         "mode": "cors",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },      
     })).json();
     return response!!.message
     // await new Promise((resolve) => setTimeout(resolve, 2000))
@@ -96,6 +100,10 @@ function replaceText(element: Element, newText: string) {
             (descendant as HTMLElement).style.color = 'white';
         } else replaceText(descendant, newText)
     });
+}
+
+function toNumber(str: string): number {
+    return Number(str.replace(/[^\d.-]/g, ''))
 }
 
 
