@@ -30,21 +30,37 @@ function setMessage(msg: string) {
 }
 
 function showLoader() {
-    console.log('showing spinner')
     const elemDiv = document.createElement('div');
     elemDiv.className = 'loading'
     elemDiv.id = 'spinner'
     document.body.appendChild(elemDiv);
 }
 function hideLoader() {
-    console.log('hiding spinner')
     document.getElementById('spinner')?.remove()
 }
 
 async function getSuggestedMessage() {
     console.log('getting message')
-    await new Promise((resolve) => setTimeout(resolve, 2000))
-    return "hey  whatup"
+    const header = document.querySelector('h1')!!
+    const itemName = header.innerText
+    const listedPrice = (header.parentElement!!.parentElement!!.children[1] as HTMLElement).innerText
+    const sellerName = 
+    const response = await (await fetch("https://hh5turw0d7.execute-api.us-west-2.amazonaws.com/Prod//suggestion/new", {
+        "body": JSON.stringify({
+            "sellerName": ,
+            itemName,
+            listedPrice,
+            "maxPrice": "",
+            "availableTimes": "",
+            "buyerName": "",
+
+        }),
+        "method": "POST",
+        "mode": "cors",
+    })).json();
+    return response!!.message
+    // await new Promise((resolve) => setTimeout(resolve, 2000))
+    // return "hey  whatup"
 }
 
 function waitForElement(selector: string) {

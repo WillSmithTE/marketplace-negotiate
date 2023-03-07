@@ -1,4 +1,5 @@
 #!/bin/bash
 
 direnv allow
+sam build
 sam deploy --parameter-overrides OpenAIApiKey=$OPENAI_API_KEY
